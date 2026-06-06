@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CLDBC Admin ERP Panel</title>
+
+<style>
+body{
+font-family:Arial;
+background:#eef2f7;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:1500px;
+margin:auto;
+background:white;
+padding:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.15);
+overflow-x:auto;
+}
+
+h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.status{
+text-align:center;
+font-weight:bold;
+margin:10px;
+color:#1e3a8a;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+font-size:12px;
+min-width:1200px;
+}
+
+th{
+background:#0f172a;
+color:white;
+padding:10px;
+white-space:nowrap;
+}
+
+td{
+border:1px solid #ddd;
+padding:8px;
+text-align:center;
+white-space:nowrap;
+}
+
+/* BUTTONS */
+button{
+padding:5px 8px;
+margin:2px;
+border:none;
+cursor:pointer;
+color:white;
+font-size:11px;
+border-radius:4px;
+}
+
+.approve{background:green;}
+.reject{background:orange;}
+.delete{background:red;}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>CLDBC ADMIN CONTROL PANEL (FULL ERP STRUCTURE)</h2>
+
+<div id="status" class="status">LOADING...</div>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Matric</th>
+<th>Course</th>
+<th>Title</th>
+<th>Unit</th>
+<th>Score</th>
+<th>Grade</th>
+<th>Point</th>
+<th>Session</th>
+<th>Semester</th>
+<th>Status</th>
+<th>Lecturer</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="tbody"></tbody>
+
+</table>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import {
+getFirestore,
+collection,
+getDocs,
+doc,
+setDoc,
+deleteDoc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDcew-XD7f7QXVCnNxAyA172Uvr9e4XJY",
+authDomain: "cedelic-college-erp.firebaseapp.com",
+projectId: "cedelic-college-erp"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function setStatus(msg){
+document.getElementById("status").innerText = msg;
+}
+
+/* LOAD DATA */
+async function loadData(){
+
+setStatus("LOADING DATA...");
+
+tbody.innerHTML = "";
+
+let snap = await getDocs(collection(db,"results_pending"));
+
+snap.forEach(docSnap=>{
+let r = docSnap.data();
+let id = docSnap.id;
+
+/* AUTO POINT */
+let point = r.gradePoint || 0;
+
+tbody.innerHTML += `
+<tr>
+<td>${r.studentName || ""}</td>
+<td>${r.matric || ""}</td>
+<td>${r.courseCode || ""}</td>
+<td>${r.courseTitle || ""}</td>
+<td>${r.unit || 0}</td>
+<td>${r.score || 0}</td>
+<td>${r.grade || ""}</td>
+<td>${point}</td>
+<td>${r.session || ""}</td>
+<td>${r.semester || ""}</td>
+<td>${r.status || "PENDING"}</td>
+<td>${r.lecturer || ""}</td>
+<td>
+
+<button class="approve" onclick="approve('${id}', ${JSON.stringify(r).replace(/"/g,'&quot;')})">Approve</button>
+
+<button class="reject" onclick="reject('${id}')">Reject</button>
+
+<button class="delete" onclick="remove('${id}')">Delete</button>
+
+</td>
+</tr>
+`;
+});
+
+setStatus("READY ✔");
+
+}
+
+loadData();
+
+/* APPROVE → MOVE TO RESULTS */
+window.approve = async function(id,data){
+
+try{
+
+await setDoc(doc(db,"results",id),{
+...data,
+status:"APPROVED"
+});
+
+await deleteDoc(doc(db,"results_pending",id));
+
+setStatus("APPROVED ✔ MOVED TO FINAL RESULTS");
+
+loadData();
+
+}catch(e){
+console.log(e);
+setStatus("APPROVE FAILED ❌");
+}
+
+};
+
+/* REJECT */
+window.reject = async function(id){
+
+try{
+
+await updateDoc(doc(db,"results_pending",id),{
+status:"REJECTED"
+});
+
+setStatus("REJECTED ✔");
+
+loadData();
+
+}catch(e){
+console.log(e);
+setStatus("REJECT FAILED ❌");
+}
+
+};
+
+/* DELETE */
+window.remove = async function(id){
+
+try{
+
+await deleteDoc(doc(db,"results_pending",id));
+
+setStatus("DELETED FROM FIRESTORE ✔");
+
+loadData();
+
+}catch(e){
+console.log(e);
+setStatus("DELETE FAILED ❌");
+}
+
+};
+
+</script>
+
+</body>
+</html>

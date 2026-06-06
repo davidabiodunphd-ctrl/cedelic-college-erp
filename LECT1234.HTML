@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CLDBC Lecturer ERP</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#eef2ff;
+}
+
+/* ================= HEADER ================= */
+.header{
+background:linear-gradient(90deg,#0f172a,#1e3a8a,#0f172a);
+color:white;
+padding:15px 10px;
+text-align:center;
+border-bottom:4px solid #fbbf24;
+}
+
+/* TOP SECTION */
+.top{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
+/* SEAL LOGO */
+.seal{
+width:85px;
+height:85px;
+border-radius:50%;
+border:3px solid #60a5fa;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+position:relative;
+animation:spin 10s linear infinite;
+box-shadow:0 0 12px rgba(96,165,250,0.3);
+}
+
+.seal::before{
+content:"";
+position:absolute;
+width:68px;
+height:68px;
+border-radius:50%;
+border:1px solid rgba(147,197,253,0.4);
+}
+
+.seal-title{
+font-size:11px;
+font-weight:bold;
+color:white;
+}
+
+.seal-symbol{
+font-size:14px;
+color:#fbbf24;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+/* MAIN TEXT */
+.main-title{
+font-size:20px;
+font-weight:900;
+color:white;
+}
+
+.sub-title{
+font-size:16px;
+color:#60a5fa;
+font-weight:bold;
+}
+
+.motto{
+font-size:12px;
+margin-top:6px;
+color:#fbbf24;
+font-weight:bold;
+}
+
+.system{
+font-size:11px;
+color:#e5e7eb;
+margin-top:4px;
+}
+
+.location{
+font-size:11px;
+color:#93c5fd;
+margin-top:4px;
+}
+
+/* TAGS */
+.bar{
+margin-top:8px;
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.tag{
+font-size:10px;
+padding:4px 8px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(96,165,250,0.4);
+border-radius:20px;
+color:white;
+}
+
+/* ================= LAYOUT ================= */
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.box{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+margin-top:20px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#1e3a8a;
+color:white;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:12px;
+}
+
+th{
+background:#0f172a;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+.action-btn{
+padding:5px 8px;
+border:none;
+cursor:pointer;
+font-size:11px;
+color:white;
+}
+
+.del{background:red;}
+
+#status{
+margin-top:10px;
+font-weight:bold;
+color:#1e3a8a;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<div class="header">
+
+<div class="top">
+
+<!-- ROTATING SEAL -->
+<div class="seal">
+<div class="seal-title">CLDBC</div>
+<div class="seal-symbol">✠</div>
+</div>
+
+<!-- TEXT -->
+<div>
+<div class="main-title">
+CEDELIC LEADERSHIP & DISCIPLESHIP BIBLE COLLEGE
+</div>
+
+<div class="sub-title">
+CLDBC UNIVERSITY ERP SYSTEM
+</div>
+</div>
+
+</div>
+
+<div class="motto">
+RAISING LEADERS FOR MINISTRY • EXCELLENCE • IMPACT
+</div>
+
+<div class="system">
+OFFICE OF ACADEMICS | LECTURER PORTAL | ADMIN SYSTEM | TRANSCRIPTS
+</div>
+
+<div class="location">
+KADUNA STATE • LAGOS STATE • NIGERIA
+</div>
+
+<div class="bar">
+<div class="tag">ADMIN</div>
+<div class="tag">LECTURER</div>
+<div class="tag">STUDENT</div>
+<div class="tag">TRANSCRIPT</div>
+</div>
+
+</div>
+
+<!-- ================= MAIN SYSTEM ================= -->
+<div class="container">
+
+<div class="box">
+<h3>LECTURER RESULT ENTRY</h3>
+
+<input id="name" placeholder="Student Name">
+<input id="matric" placeholder="Matric Number">
+<input id="courseCode" placeholder="Course Code">
+<input id="courseTitle" placeholder="Course Title">
+<input id="score" type="number" placeholder="Score">
+
+<select id="session">
+<option>2023/2024</option>
+<option>2024/2025</option>
+<option>2025/2026</option>
+</select>
+
+<select id="semester">
+<option>First Semester</option>
+<option>Second Semester</option>
+</select>
+
+<input id="lecturer" placeholder="Lecturer Name">
+
+<button onclick="submitResult()">SUBMIT TO ADMIN</button>
+
+<div id="status">System Ready...</div>
+</div>
+
+<div class="box">
+<h3>PENDING RESULTS</h3>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Matric</th>
+<th>Course</th>
+<th>Title</th>
+<th>Score</th>
+<th>Grade</th>
+<th>Session</th>
+<th>Semester</th>
+<th>Status</th>
+<th>Lecturer</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+serverTimestamp,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDcew-XD7f7QXVCnNxAyA172Uvr9e4XJY",
+authDomain: "cedelic-college-erp.firebaseapp.com",
+projectId: "cedelic-college-erp"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function getGrade(s){
+if(s>=70) return "A";
+if(s>=60) return "B";
+if(s>=50) return "C";
+return "F";
+}
+
+window.submitResult = async function(){
+
+const data = {
+studentName:document.getElementById("name").value,
+matric:document.getElementById("matric").value.toUpperCase(),
+courseCode:document.getElementById("courseCode").value,
+courseTitle:document.getElementById("courseTitle").value,
+score:Number(document.getElementById("score").value),
+session:document.getElementById("session").value,
+semester:document.getElementById("semester").value,
+lecturer:document.getElementById("lecturer").value,
+grade:getGrade(Number(document.getElementById("score").value)),
+status:"PENDING",
+createdAt:serverTimestamp()
+};
+
+await addDoc(collection(db,"results_pending"),data);
+
+document.getElementById("status").innerText="SUBMITTED ✔";
+load();
+};
+
+async function load(){
+const snap=await getDocs(collection(db,"results_pending"));
+const t=document.getElementById("table");
+t.innerHTML="";
+
+snap.forEach(d=>{
+const x=d.data();
+t.innerHTML+=`
+<tr>
+<td>${x.studentName}</td>
+<td>${x.matric}</td>
+<td>${x.courseCode}</td>
+<td>${x.courseTitle}</td>
+<td>${x.score}</td>
+<td>${x.grade}</td>
+<td>${x.session}</td>
+<td>${x.semester}</td>
+<td>${x.status}</td>
+<td>${x.lecturer}</td>
+<td><button class="action-btn del" onclick="del('${d.id}')">X</button></td>
+</tr>`;
+});
+}
+
+window.del=async function(id){
+await deleteDoc(doc(db,"results_pending",id));
+load();
+};
+
+load();
+
+</script>
+
+</body>
+</html>
